@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import { PAGE_MAP, PAGE_CHAT } from './constants';
 import ChatPage from './chat/Chat.js'
 import MapPage from './map/Map.js'
@@ -8,6 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
+import './styles/landing.css';
 
 class App extends Component {
   constructor(props) {
