@@ -7,6 +7,15 @@ import {
   Marker,
   Polyline } from 'react-google-maps';
 import HeatmapLayer from "react-google-maps/lib/components/visualization/HeatmapLayer";
+import TWITTER_1 from '../assets/images/twitter-feed1.svg';
+import TWITTER_2 from '../assets/images/twitter-feed2.svg';
+import Bird from '../assets/images/twitter.svg';
+
+const TEST_TWITTER = [
+  { id: 1, svg: TWITTER_1, lat: 47.66003713198761, lng: -122.31556885183716 },
+  { id: 2, svg: TWITTER_2, lat: 47.67225652151954, lng: -122.32677793787104 },
+];
+
 const { compose, withProps, lifecycle } = require("recompose");
 
 const TEST_START = {
@@ -74,6 +83,8 @@ const GoogleMapComponent = compose(
     path,
     theme,
     onMapClick,
+    onTwitterClick,
+    activeTwitterId
   } = props;
 
   const heatMapOptions = {
@@ -118,7 +129,16 @@ const GoogleMapComponent = compose(
         options={heatMapOptions}
       />}
 
-      {/*{this.state.twitter.map((tweet, id)=> <Marker key)}*/}
+      {TEST_TWITTER.map((tweet, id)=> <Marker
+        key={id}
+        icon={{
+          path: window.google.maps.SymbolPath.CIRCLE,
+          strokeColor: "#03a9f4",
+          scale: 6
+        }}
+        onClick={() => onTwitterClick(tweet.id)}
+        position={{ lat: tweet.lat, lng: tweet.lng }}
+      />)}
 
       {/* Crime Markers */}
       {/* TODO - Replace markers with icons */}

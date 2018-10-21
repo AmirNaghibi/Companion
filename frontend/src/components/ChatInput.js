@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/chat_styles.css'
 
 class ChatInput extends React.Component {
   constructor(props) {
@@ -28,6 +29,7 @@ class ChatInput extends React.Component {
   render() {
     return (
       <form className="chat-input" onSubmit={this.submitHandler}>
+      <i class="fas fa-map-marker-alt fa-2x map-marking-icon" ></i>
         <input type="text"
           onChange={this.textChangeHandler}
           value={this.state.chatInput}

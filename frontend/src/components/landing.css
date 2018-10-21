@@ -14,12 +14,12 @@
 
   /*width:250px;*/
   /*height: 250px;*/
-  background-image: radial-gradient(center center, circle cover, #e9e9e9, #FFFFFF);
-  background-image: -o-radial-gradient(center center, circle cover, #e9e9e9, #FFFFFF);
-  background-image: -ms-radial-gradient(center center, circle cover, #e9e9e9, #FFFFFF);
-  background-image: -moz-radial-gradient(center center, circle cover, #e9e9e9, #FFFFFF);
-  background-image: -webkit-radial-gradient(center center, circle cover, #e9e9e9, #FFFFFF);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e9e9e9', endColorstr='#FFFFFF',GradientType=1 );
+  background-image: radial-gradient(center center, circle cover, #FFFFFF, #FFFFFF);
+  background-image: -o-radial-gradient(center center, circle cover, #FFFFFF, #FFFFFF);
+  background-image: -ms-radial-gradient(center center, circle cover, #FFFFFF, #FFFFFF);
+  background-image: -moz-radial-gradient(center center, circle cover, #FFFFFF, #FFFFFF);
+  background-image: -webkit-radial-gradient(center center, circle cover, #FFFFFF, #FFFFFF);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#FFFFFF',GradientType=1 );
 
 }
 
