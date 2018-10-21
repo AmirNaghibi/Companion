@@ -13,7 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Logo from './assets/images/logo.svg';
 import { withStyles } from '@material-ui/core/styles';
-
+import TWITTER_1 from './assets/images/twitter-feed1.svg';
+import TWITTER_2 from './assets/images/twitter-feed2.svg';
 
 import {connect} from 'react-redux';
 import {userAuth} from './actions/authActions';
@@ -21,6 +22,11 @@ import {auth, firebase} from './firebase'
 import { calcRoute } from './map/routeUtils';
 
 import ChatApp from './components/ChatApp';
+
+const TEST_TWITTER = [
+  { uri: TWITTER_1, lat: 47.66003713198761, lng: -122.31556885183716 },
+  { uri: TWITTER_2, lat: 47.67225652151954, lng: -122.32677793787104 },
+];
 
 const TEST_PATH = [
   { lat: 47.65641, lng: -122.3132624 },
@@ -64,7 +70,9 @@ class App extends Component {
       destination: null,
       crimeData: [],
       isLandingOpen: true,
+      activeTwitterId: null,
     };
+    this.onTwitterClick = this.onTwitterClick.bind(this);
     this.onUpdateCurrentLocation = this.onUpdateCurrentLocation.bind(this);
     this.onUpdateDestination = this.onUpdateDestination.bind(this);
     this.getCrimeData = this.getCrimeData.bind(this);
@@ -76,6 +84,10 @@ class App extends Component {
     firebase.auth.onAuthStateChanged(user_data => {
       this.props.userAuth(user_data);
     })
+  }
+
+  onTwitterClick(activeTwitterId) {
+    this.setState({ activeTwitterId })
   }
 
   onUpdateCurrentLocation(currentLocation) {
@@ -92,6 +104,7 @@ class App extends Component {
       lat: e.latLng.lat(),
       lng: e.latLng.lng(),
     };
+    console.log(destination);
     if (destination && destination.lat && destination.lng) {
       this.updatePath(this.state.currentLocation, destination);
     } else {
@@ -131,7 +144,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(window.location.href);
     return (
       <div className="App">
         <BrowserRouter>
@@ -161,6 +173,8 @@ class App extends Component {
               crimeData={this.state.crimeData}
               destination={this.state.destination}
               path={this.state.path}
+              activeTwitterId={this.state.activeTwitterId}
+              onTwitterClick={this.onTwitterClick}
               {...routeProps}
             />)} />
           </div>

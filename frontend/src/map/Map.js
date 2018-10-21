@@ -3,15 +3,22 @@ import '../App.css';
 import GoogleMap from './GoogleMap';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
-// import DeleteIcon from '@material-ui/icons/Delete';
 import { withStyles } from '@material-ui/core/styles';
 import { getStyle } from './routeUtils'
+import TWITTER_1 from '../assets/images/twitter-feed1.svg';
+import TWITTER_2 from '../assets/images/twitter-feed2.svg';
+
+const TEST_TWITTER = [
+  { id: 1, svg: TWITTER_1, lat: 47.66003713198761, lng: -122.31556885183716 },
+  { id: 2, svg: TWITTER_2, lat: 47.67225652151954, lng: -122.32677793787104 },
+];
 
 const TEST_FRIENDS = [
   { profile: 'https://scontent.fsea1-1.fna.fbcdn.net/v/t31.0-8/614849_10152392112135234_701775898_o.jpg?_nc_cat=110&_nc_ht=scontent.fsea1-1.fna&oh=c8ca431609d6f77d663618ba689a8808&oe=5C87A0C0', name: 'John Lee', mutualFriends: 'You share 1 mutual friend with Harry Yao' },
   { profile: 'https://scontent.fsea1-1.fna.fbcdn.net/v/t1.0-9/18119309_10206976070319196_8593262290938460166_n.jpg?_nc_cat=110&_nc_ht=scontent.fsea1-1.fna&oh=17ee4a8e081c583bfebc6ed872da8c6c&oe=5C428F0A', name: 'Charlotte Chen', mutualFriends: 'You share 3 mutual friends with Harry Yao' },
   { profile: 'https://scontent.fsea1-1.fna.fbcdn.net/v/t1.0-9/30124455_2076947005896033_4923734062704623616_o.jpg?_nc_cat=111&_nc_ht=scontent.fsea1-1.fna&oh=3d74880b51b98a040efc7385a422de78&oe=5C476F2B', name: 'Amir Nagibi', mutualFriends: 'You share 2 mutual friends with Harry Yao' },
 ];
+
 
 const styles = {
   container: {
@@ -59,6 +66,14 @@ const styles = {
     backgroundColor: 'rgba(255, 255, 255, 1)',
     borderRadius: 5,
     boxShadow: '0px 0px 5px rgba(100, 100, 100, 1)'
+  },
+  twitter: {
+    position: 'absolute',
+    display: 'flex',
+    justifyContent: 'center',
+    top: 80,
+    width: '100%',
+    zIndex: 10,
   }
 };
 
@@ -83,6 +98,7 @@ class MapPage extends Component {
     };
     this.getGeolocationData = this.getGeolocationData.bind(this);
     this.renderMap = this.renderMap.bind(this);
+    this.renderTwitterImage = this.renderTwitterImage.bind(this);
     this.switchTheme = this.switchTheme.bind(this);
     this.toggleFriends = this.toggleFriends.bind(this);
     this.navigateToChat = this.navigateToChat.bind(this);
@@ -127,6 +143,11 @@ class MapPage extends Component {
     this.props.history.push('/chat');
   }
 
+  renderTwitterImage(id) {
+    const image = TEST_TWITTER.filter(data => data.id === id);
+    return <img src={image[0].svg} />
+  }
+
   renderMap() {
     const {
       currentLocation,
@@ -134,6 +155,8 @@ class MapPage extends Component {
       crimeData,
       path,
       onMapClick,
+      activeTwitterId,
+      onTwitterClick,
     } = this.props;
 
     const hasCurrentLocation = currentLocation && currentLocation.lat && currentLocation.lng;
@@ -149,6 +172,8 @@ class MapPage extends Component {
         path={completePath}
         onMapClick={onMapClick}
         theme={this.state.theme}
+        activeTwitterId={activeTwitterId}
+        onTwitterClick={onTwitterClick}
       />
     }
 
@@ -161,6 +186,8 @@ class MapPage extends Component {
         path={null} // we wouldn't need a path if there's no destination
         onMapClick={onMapClick}
         theme={this.state.theme}
+        activeTwitterId={activeTwitterId}
+        onTwitterClick={onTwitterClick}
       />
     }
 
@@ -173,8 +200,15 @@ class MapPage extends Component {
   }
 
   render() {
+    const { activeTwitterId, onTwitterClick } = this.props;
+
     return (
       <div style={styles.container}>
+
+        {!!activeTwitterId && <div style={styles.twitter} onClick={() => onTwitterClick(null)}>
+          {this.renderTwitterImage(activeTwitterId)}
+        </div>}
+
         {this.renderMap()}
 
         <div style={styles.friend} className={this.state.openFriends ? 'slide-up' : 'slide-down'}>
