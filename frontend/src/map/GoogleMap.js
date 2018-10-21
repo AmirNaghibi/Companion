@@ -4,7 +4,6 @@ import {
   withScriptjs,
   withGoogleMap,
   GoogleMap,
-  DirectionsRenderer,
   Marker,
   Polyline } from 'react-google-maps';
 import HeatmapLayer from "react-google-maps/lib/components/visualization/HeatmapLayer";
