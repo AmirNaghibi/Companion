@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './landing.css'
 import Logo from '../assets/images/logo.svg';
+import Facebook from '../assets/images/fb-button.svg';
 
 
 class Landing extends Component {
@@ -22,6 +23,8 @@ class Landing extends Component {
       <div onClick={this.handleClick} className={`landing-container ${this.state.isClosed ? 'dismiss' : ''}`}>
         <img src={Logo} style={{ height: 60 }}/>
         <p style={{ marginTop: 5, color: '#3f3f3f' }}>safe travels</p>
+
+        <img src={Facebook} style={{height: 60 }}/>
       </div>
     )
   }
