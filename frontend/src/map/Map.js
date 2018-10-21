@@ -1,7 +1,21 @@
 import React, { Component } from 'react';
 import '../App.css';
 import { PAGE_CHAT } from '../constants';
+import GoogleMap from './GoogleMap'
 
+const styles = {
+  container: {
+    display: 'flex',
+    flexFlow: 'column',
+    width: '100%',
+    height: '100%',
+  },
+  buttonContainer: {
+    display: 'flex',
+    height: 'min-content',
+    width: '100%',
+  }
+};
 
 class MapPage extends Component {
   constructor(props) {
@@ -28,10 +42,12 @@ class MapPage extends Component {
 
   render() {
     return (
-      <div>
-        <h1>This is the map interface</h1>
-        <button onClick={this.fetchRoute}>Call Dummy Endpoint</button>
-        <button onClick={() => this.props.onRoute(PAGE_CHAT)}>Go to Chat Page</button>
+      <div style={styles.container}>
+        <GoogleMap />
+        <div style={styles.buttonContainer}>
+          <button onClick={this.fetchRoute}>Call Dummy Endpoint</button>
+          <button onClick={() => this.props.onRoute(PAGE_CHAT)}>Go to Chat Page</button>
+        </div>
       </div>
     );
   }
