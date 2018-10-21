@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import { PAGE_MAP, PAGE_CHAT } from './constants';
-import ChatPage from './chat/Chat.js'
-import MapPage from './map/Map.js'
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import './styles/landing.css';
+import {BrowserRouter, Route} from 'react-router-dom';
+import Register from './components/register';
+import Login from './components/login';
+import Landing from './components/Landing';
+import Home from './components/home';
+
+import {connect} from 'react-redux';
+import {userAuth} from './actions/authActions';
+
+import {firebase} from './firebase'
+
+import ButtonAppBar from './components/ButtonAppBar';
 
 const TEST_PATH = [
   { lat: 47.65641, lng: -122.3132624 },
@@ -24,6 +27,7 @@ const TEST_CRIME_DATA = [
 ];
 
 class App extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -39,11 +43,10 @@ class App extends Component {
     this.onUpdateCrimeData = this.onUpdateCrimeData.bind(this);
   }
 
-  onRoute(page) {
-    console.log(page);
-    if (page === PAGE_MAP || page === PAGE_CHAT) {
-      this.setState({ page });
-    }
+  componentDidMount(){
+    firebase.auth.onAuthStateChanged(user_data => {
+      this.props.userAuth(user_data);
+    })
   }
 
   onUpdateCurrentLocation(currentLocation) {
@@ -78,39 +81,55 @@ class App extends Component {
   }
 
   render() {
-    return (
+    return (      
       <div className="App">
         <AppBar position="static">
-        <Toolbar>
-          <IconButton color="inherit" aria-label="Menu">
-            
-          </IconButton>
-          <Typography variant="h6" color="inherit">
-            Companion
-          </Typography>
-          <Button color="inherit">Signup</Button>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>
-
-        {/* Maps Page */}
-        {(this.state.page === PAGE_CHAT) && <ChatPage
-          onRoute={this.onRoute}
-        />}
-
-        {/* Chat Page */}
-        {(this.state.page === PAGE_MAP) && <MapPage
-          onUpdateCurrentLocation={this.onUpdateCurrentLocation}
-          onMapClick={this.onUpdateDestination}
-          currentLocation={this.state.currentLocation}
-          crimeData={this.state.crimeData}
-          destination={this.state.destination}
-          path={this.state.path}
-          onRoute={this.onRoute}
-        />}
+          <Toolbar>
+            <IconButton color="inherit" aria-label="Menu"></IconButton>
+            <Typography variant="h6" color="inherit">Companion</Typography>
+            <Button color="inherit">Signup</Button>
+            <Button color="inherit">Login</Button>
+          </Toolbar>
+        </AppBar>
+        
+        <BrowserRouter>
+          <ButtonAppBar authUser={this.props.user_profile}/>
+          <Route exact path="/" component={Landing}/>
+          <Route exact path="/register" component={Register}/>
+          <Route exact path="/login" component={Login}/>
+          <Route exact path="/home" component={Home}/>
+          <Route exact path="/chat" render={() => (<ChatPage />)} />
+          <Route exact path="/map" render={() => (<MapPage
+            onUpdateCurrentLocation={this.onUpdateCurrentLocation}
+            onMapClick={this.onUpdateDestination}
+            currentLocation={this.state.currentLocation}
+            crimeData={this.state.crimeData}
+            destination={this.state.destination}
+            path={this.state.path}
+            onRoute={this.onRoute}
+          />)} />                                     
+        </BrowserRouter>
       </div>
-    )
+    );
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  const {
+    user_profile
+  } = state.authReducer;
+
+  return {
+    user_profile,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+      userAuth: (values) => {
+        dispatch(userAuth(values))
+      }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
