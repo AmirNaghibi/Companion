@@ -8,9 +8,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { getStyle } from './routeUtils'
 
 const TEST_FRIENDS = [
-  { profile: './friend1.png', name: 'John Lee', mutualFriends: 'You share 1 mutual friend with Harry Yao' },
-  { profile: './friend2.png', name: 'Charlotte Chen', mutualFriends: 'You share 3 mutual friends with Harry Yao' },
-  { profile: './friend3.png', name: 'Amir Nagibi', mutualFriends: 'You share 2 mutual friends with Harry Yao' },
+  { profile: 'https://scontent.fsea1-1.fna.fbcdn.net/v/t31.0-8/614849_10152392112135234_701775898_o.jpg?_nc_cat=110&_nc_ht=scontent.fsea1-1.fna&oh=c8ca431609d6f77d663618ba689a8808&oe=5C87A0C0', name: 'John Lee', mutualFriends: 'You share 1 mutual friend with Harry Yao' },
+  { profile: 'https://scontent.fsea1-1.fna.fbcdn.net/v/t1.0-9/18119309_10206976070319196_8593262290938460166_n.jpg?_nc_cat=110&_nc_ht=scontent.fsea1-1.fna&oh=17ee4a8e081c583bfebc6ed872da8c6c&oe=5C428F0A', name: 'Charlotte Chen', mutualFriends: 'You share 3 mutual friends with Harry Yao' },
+  { profile: 'https://scontent.fsea1-1.fna.fbcdn.net/v/t1.0-9/30124455_2076947005896033_4923734062704623616_o.jpg?_nc_cat=111&_nc_ht=scontent.fsea1-1.fna&oh=3d74880b51b98a040efc7385a422de78&oe=5C476F2B', name: 'Amir Nagibi', mutualFriends: 'You share 2 mutual friends with Harry Yao' },
 ];
 
 const styles = {
@@ -39,19 +39,19 @@ const styles = {
     display: 'flex',
     flexFlow: 'column',
     alignItems: 'flex-start',
+    justifyContent: 'center',
     position: 'absolute',
     width: '100%',
-    height: '30%',
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    height: '40%',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    boxShadow: '0 0 50px 30px rgba(0, 0, 0, 0.2)',
     bottom: 0,
     overflow: 'scroll',
     padding: 5,
-    // transition: '0.5s',
-    // transform: 'translateY(100%)'
   },
   friendItem: {
     boxSizing: 'border-box',
-    height: 50,
+    height: 80,
     width: '100%',
     marginTop: 5,
     marginBottom: 5,
@@ -179,10 +179,14 @@ class MapPage extends Component {
 
         <div style={styles.friend} className={this.state.openFriends ? 'slide-up' : 'slide-down'}>
           {this.state.friends.map((friend, id) => <div style={styles.friendItem} key={id}>
-            <div style={{width: 50 }}>Profile</div>
-            <div onClick={this.navigateToChat} style={{display: 'flex', flexFlow: 'column'}}>
-              <p><b>{friend.name}</b></p>
-              <p>{friend.mutualFriends}</p>
+            <div style={{height: 80, width: 80, overflow: 'hidden'}}>
+            <img src={friend.profile} style={{display: 'block',
+              height: '100%',
+              width: 'auto' }} />
+            </div>
+            <div onClick={this.navigateToChat} style={{alignItems: 'flex-start', justifyContent: 'center', display: 'flex', flexFlow: 'column'}}>
+              <p style={{textAlign: 'left', padding: '0 0 0 15px', margin: 0}}><b>{friend.name}</b></p>
+              <p style={{textAlign: 'left', padding: '0 0 0 15px', margin: 0, marginTop: 2}}>{friend.mutualFriends}</p>
             </div>
           </div>)}
         </div>
