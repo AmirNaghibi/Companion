@@ -2,5 +2,5 @@
 
 // Settings configured here will be merged into the final config object.
 export default {
-  api: 'http://localhost:4008'
+  api: 'https://seyfu-220110.appspot.com'
 }
