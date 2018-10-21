@@ -36,7 +36,7 @@ class Register extends Component {
         auth.doCreateUserWithEmailAndPassword(email, password1)
         .then(authUser => {
           this.setState({ ...INITIAL_STATE });
-          history.push('/home');
+          history.push('/map');
         })
         .catch(error => {
           this.setState({error: error});

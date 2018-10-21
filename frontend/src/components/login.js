@@ -37,7 +37,7 @@ class Login_Page extends Component {
         auth.doSignInWithEmailAndPassword(email, password)
           .then(() => {
             this.setState({ ...INITIAL_STATE });
-            history.push('/home');
+            history.push('/map');
           })
           .catch(error => {
             this.setState({error: error});
