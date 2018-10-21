@@ -3,7 +3,9 @@ import io from 'socket.io-client';
 import config from '../config';
 import Messages from './Messages';
 import ChatInput from './ChatInput';
-require('../styles/ChatApp.css');
+import '../styles/ChatApp.css';
+
+import '../styles/chat_styles.css'
 class ChatApp extends React.Component {
   socket = {};
   constructor(props) {
@@ -42,10 +44,13 @@ class ChatApp extends React.Component {
 
   render() {
     return (
-      <div className="container">
-        <h3>React Chat App</h3>
+      <div className="container chat-header">
+        <h3>CHATTING WITH AMIR</h3>
         <Messages messages={this.state.messages} />
-        <ChatInput onSend={this.sendHandler} />
+        
+          <ChatInput onSend={this.sendHandler} className="chat-input" />
+        
+        
       </div>
     );
   }

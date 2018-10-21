@@ -9,7 +9,7 @@ import { getStyle } from './routeUtils'
 
 const TEST_FRIENDS = [
   { profile: 'https://scontent.fsea1-1.fna.fbcdn.net/v/t31.0-8/614849_10152392112135234_701775898_o.jpg?_nc_cat=110&_nc_ht=scontent.fsea1-1.fna&oh=c8ca431609d6f77d663618ba689a8808&oe=5C87A0C0', name: 'John Lee', mutualFriends: 'You share 1 mutual friend with Harry Yao' },
-  { profile: 'https://scontent.fsea1-1.fna.fbcdn.net/v/t1.0-9/18119309_10206976070319196_8593262290938460166_n.jpg?_nc_cat=110&_nc_ht=scontent.fsea1-1.fna&oh=17ee4a8e081c583bfebc6ed872da8c6c&oe=5C428F0A', name: 'Charlotte Chen', mutualFriends: 'You share 3 mutual friends with Harry Yao' },
+  { profile: 'https://scontent.fsea1-1.fna.fbcdn.net/v/t1.0-9/18119309_10206976070319196_8593262290938460166_n.jpg?_nc_cat=110&_nc_ht=scontent.fsea1-1.fna&oh=17ee4a8e081c583bfebc6ed872da8c6c&oe=5C428F0A', name: 'Charlotte Chen', mutualFriends: 'You share 3 mutual friends with Jatin Suneja' },
   { profile: 'https://scontent.fsea1-1.fna.fbcdn.net/v/t1.0-9/30124455_2076947005896033_4923734062704623616_o.jpg?_nc_cat=111&_nc_ht=scontent.fsea1-1.fna&oh=3d74880b51b98a040efc7385a422de78&oe=5C476F2B', name: 'Amir Nagibi', mutualFriends: 'You share 2 mutual friends with Harry Yao' },
 ];
 
