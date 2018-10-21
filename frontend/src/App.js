@@ -36,6 +36,7 @@ class App extends Component {
           <Typography variant="h6" color="inherit">
             Companion
           </Typography>
+          <Button color="inherit">Signup</Button>
           <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
