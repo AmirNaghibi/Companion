@@ -120,7 +120,8 @@ class App extends Component {
             <Route exact path="/register" component={Register}/>
             <Route exact path="/login" component={Login}/>
             <Route exact path="/home" component={Home}/>
-            <Route exact path="/map" render={() => (<MapPage
+            <Route exact path="/chat" component={ChatPage}/>
+            <Route exact path="/map" render={(routeProps) => (<MapPage
               onUpdateCurrentLocation={this.onUpdateCurrentLocation}
               onMapClick={this.onUpdateDestination}
               getCrimeData={this.getCrimeData}
@@ -128,6 +129,7 @@ class App extends Component {
               crimeData={this.state.crimeData}
               destination={this.state.destination}
               path={this.state.path}
+              {...routeProps}
             />)} />
           </div>
         </BrowserRouter>

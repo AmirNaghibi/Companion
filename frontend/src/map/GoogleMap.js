@@ -65,7 +65,6 @@ const GoogleMapComponent = compose(
   withGoogleMap,
   lifecycle({
     componentDidMount() {
-
     }
   })
 )(props => {
@@ -74,7 +73,8 @@ const GoogleMapComponent = compose(
     destination,
     crimeData,
     path,
-    onMapClick
+    theme,
+    onMapClick,
   } = props;
 
   const heatMapOptions = {
@@ -86,8 +86,9 @@ const GoogleMapComponent = compose(
     <GoogleMap
       labelAnchor={new window.google.maps.Point(0, 0)}
       defaultZoom={16}
+      defaultOptions={{styles: theme}}
+      options={{styles: theme}}
       defaultCenter={currentLocation}
-      style={{ width: 800 }}
       onClick={onMapClick}
     >
       {/* TODO: add a toast to prompt user to select a destination */}
@@ -118,10 +119,13 @@ const GoogleMapComponent = compose(
         options={heatMapOptions}
       />}
 
+      {/*{this.state.twitter.map((tweet, id)=> <Marker key)}*/}
+
       {/* Crime Markers */}
       {/* TODO - Replace markers with icons */}
       {/*{crimeData && crimeData.map((data, id) => <Marker key={id} position={{lat: data.Latitude, lng: data.Longitude }} />)}*/}
-    </GoogleMap>)}
+    </GoogleMap>)
+  }
 );
 
 export default GoogleMapComponent;
