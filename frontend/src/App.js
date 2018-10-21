@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import { PAGE_MAP, PAGE_CHAT } from './constants';
-import ChatPage from './chat/Chat.js'
+import {BrowserRouter, Route} from 'react-router-dom';
+import Navbar from './components/appbar';
+import Chat from './chat/Chat.js'
+import {connect} from 'react-redux';
+import {userAuth} from './actions/authActions';
 import MapPage from './map/Map.js'
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import './styles/landing.css';
+
+import Home from './components/home';
+import Login_Page from './components/login';
+import Register from './components/register';
+import Landing from './components/Landing';
 
 class App extends Component {
   constructor(props) {
@@ -27,28 +31,45 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <AppBar position="static">
-        <Toolbar>
-          <IconButton color="inherit" aria-label="Menu">
-            
-          </IconButton>
-          <Typography variant="h6" color="inherit">
-            Companion
-          </Typography>
-          <Button color="inherit">Signup</Button>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>
+      <div>
+      <Navbar/>
+      <BrowserRouter>
+          <div>
+            <Route exact path="/" component={Landing}/>
+            <Route exact path="/register" component={Register}/>
+            <Route exact path="/login" component={Login_Page}/>
+            <Route exact path="/maps" component={MapPage}/>
+            <Route exact path="/chat" component={Chat}/>
+            <Route exact path="/home" component= {Home}/>
+          </div>
+      </BrowserRouter>
 
         {/* Maps Page */}
-        {(this.state.page === PAGE_CHAT) && <ChatPage onRoute={this.onRoute}/>}
+        {/* {(this.state.page === PAGE_CHAT) && <ChatPage onRoute={this.onRoute}/>} */}
 
         {/* Chat Page */}
-        {(this.state.page === PAGE_MAP) && <MapPage onRoute={this.onRoute}/>}
+        {/* {(this.state.page === PAGE_MAP) && <MapPage onRoute={this.onRoute}/>} */}
       </div>
     )
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  const {
+    user_profile
+  } = state.authReducer;
+
+  return {
+    user_profile,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+      userAuth: (values) => {
+        dispatch(userAuth(values))
+      }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
