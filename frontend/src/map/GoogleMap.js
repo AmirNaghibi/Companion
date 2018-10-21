@@ -8,7 +8,6 @@ import {
   Marker,
   Polyline } from 'react-google-maps';
 import HeatmapLayer from "react-google-maps/lib/components/visualization/HeatmapLayer";
-const request = require('request');
 const { compose, withProps, lifecycle } = require("recompose");
 
 const TEST_START = {
@@ -37,14 +36,9 @@ const TEST_PATH = {
 };
 
 const extractHeatmapData = (crimeData) => {
-  const result = crimeData
+  return crimeData
     .filter(data => data.Latitude && data.Longitude)
     .map(data => (new window.google.maps.LatLng(data.Latitude, data.Longitude)));
-
-
-  console.log('it id ', result[0].lat());
-
-  return result;
 };
 
 const extractHeatmapData1 = (crimeData) => {
@@ -59,26 +53,6 @@ const extractHeatmapData1 = (crimeData) => {
 
   return result;
 };
-
-function getLatLon(arr) {
-  const result = [
-    { lat: 47.6564522, lng: -122.3277878 },
-    { lat: 47.65641, lng: -122.3132624 },
-    ];
-
-  // const res = arr.map(item => {
-  //   return {
-  //     lat: combined[item.location_id].location.lat,
-  //     lng: combined[item.location_id].location.lng
-  //   }
-  // });
-
-  // for (let i = 1; i<res.length; i++) {
-  //   res2.push([res[i-1], res[i]]);
-  // }
-
-  return result;
-}
 
 const GoogleMapComponent = compose(
   withProps({
@@ -146,7 +120,7 @@ const GoogleMapComponent = compose(
 
       {/* Crime Markers */}
       {/* TODO - Replace markers with icons */}
-      {crimeData && crimeData.map(data => <Marker position={{lat: data.Latitude, lng: data.Longitude }} />)}
+      {/*{crimeData && crimeData.map((data, id) => <Marker key={id} position={{lat: data.Latitude, lng: data.Longitude }} />)}*/}
     </GoogleMap>)}
 );
 

@@ -15,8 +15,7 @@ import Button from '@material-ui/core/Button';
 import {connect} from 'react-redux';
 import {userAuth} from './actions/authActions';
 import {auth, firebase} from './firebase'
-
-import ButtonAppBar from './components/ButtonAppBar';
+import { calcRoute } from './map/routeUtils';
 
 const TEST_PATH = [
   { lat: 47.65641, lng: -122.3132624 },
@@ -32,19 +31,24 @@ const TEST_CRIME_DATA = [
   { Latitude: 47.66119643672335, Longitude: -122.31405258178711, Description: 'SUSPICIOUS CIRCUMSTANCES', Date: '19/05/2017 03:30:33 AM' },
 ];
 
+const processPaths = (paths) => {
+  return paths.map(coord => ({ lat: coord.lat(), lng: coord.lng() }));
+};
+
 class App extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      path: TEST_PATH || [],
+      path: [],
       currentLocation: null,
       destination: null,
-      crimeData: TEST_CRIME_DATA || []
+      crimeData: []
     };
     this.onUpdateCurrentLocation = this.onUpdateCurrentLocation.bind(this);
     this.onUpdateDestination = this.onUpdateDestination.bind(this);
-    this.onUpdateCrimeData = this.onUpdateCrimeData.bind(this);
+    this.getCrimeData = this.getCrimeData.bind(this);
+    this.updatePath = this.updatePath.bind(this);
   }
 
   componentDidMount(){
@@ -54,7 +58,6 @@ class App extends Component {
   }
 
   onUpdateCurrentLocation(currentLocation) {
-    console.log('current location is ', currentLocation);
     if (currentLocation && currentLocation.lat && currentLocation.lng) {
       this.setState({ currentLocation })
     } else {
@@ -68,20 +71,35 @@ class App extends Component {
       lat: e.latLng.lat(),
       lng: e.latLng.lng(),
     };
-    console.log(destination);
     if (destination && destination.lat && destination.lng) {
-      this.setState({ destination });
+      this.updatePath(this.state.currentLocation, destination);
     } else {
       console.error('ERROR: unable to update destination');
-      this.setState({ destination: null });
+      this.setState({ destination: null, path: [] });
     }
   }
 
-  onUpdateCrimeData(data) {
-    // TODO - add an API call here to retrieve the crime data from the server
-    console.log('updating crime data...');
-    const crimeData = TEST_CRIME_DATA;
-    this.setState({ crimeData });
+  updatePath(start, destination) {
+    calcRoute(start, destination, (result, status) => {
+      if (status === 'OK') {
+        const path = processPaths(result.routes[0].overview_path);
+        this.setState({ destination, path });
+      } else {
+        this.setState({ destination: null, path: [] });
+        console.error('ERROR: unable to retrieve path', result);
+      }
+    });
+  }
+
+  getCrimeData() {
+    const options = { method: 'GET' };
+
+    fetch('https://seyfu-220110.appspot.com/crimedata', options)
+      .then(res => res.json())
+      .then(crimeData  => {
+        this.setState({ crimeData })
+      })
+      .catch(err => console.error('Error: ', err));
   }
 
   render() {
@@ -102,10 +120,10 @@ class App extends Component {
             <Route exact path="/register" component={Register}/>
             <Route exact path="/login" component={Login}/>
             <Route exact path="/home" component={Home}/>
-            <Route exact path="/chat" render={() => (<ChatPage />)} />
             <Route exact path="/map" render={() => (<MapPage
               onUpdateCurrentLocation={this.onUpdateCurrentLocation}
               onMapClick={this.onUpdateDestination}
+              getCrimeData={this.getCrimeData}
               currentLocation={this.state.currentLocation}
               crimeData={this.state.crimeData}
               destination={this.state.destination}

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import '../App.css';
-import { PAGE_CHAT } from '../constants';
 import GoogleMap from './GoogleMap';
 
 const styles = {
@@ -22,10 +21,7 @@ const API_KEY = 'AIzaSyBfzfG_CDAaVM2mYzqBRhQAe70ZX_epyHA';
 class MapPage extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-
-    };
-    this.fetchRoute = this.fetchRoute.bind(this);
+    this.state = {};
     this.getGeolocationData = this.getGeolocationData.bind(this);
     this.renderMap = this.renderMap.bind(this);
   }
@@ -33,6 +29,7 @@ class MapPage extends Component {
   componentDidMount() {
     // fetch current location from device GPS
     this.getGeolocationData();
+    this.props.getCrimeData();
   }
 
   getGeolocationData() {
@@ -41,16 +38,12 @@ class MapPage extends Component {
     fetch(`https://www.googleapis.com/geolocation/v1/geolocate?key=${API_KEY}`, options)
       .then(res => res.json())
       .then(({ location })  => {
-        console.log(location);
         this.props.onUpdateCurrentLocation({
           lat: location.lat,
           lng: location.lng,
         });
       })
       .catch(err => console.error('Error: ', err));
-  }
-
-  fetchRoute() {
   }
 
   renderMap() {
