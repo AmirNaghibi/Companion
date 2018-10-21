@@ -17,6 +17,8 @@ import {userAuth} from './actions/authActions';
 import {auth, firebase} from './firebase'
 import { calcRoute } from './map/routeUtils';
 
+import ChatApp from './components/ChatApp';
+
 const TEST_PATH = [
   { lat: 47.65641, lng: -122.3132624 },
   { lat: 47.6575286, lng: -122.3141852 },
@@ -120,7 +122,7 @@ class App extends Component {
             <Route exact path="/register" component={Register}/>
             <Route exact path="/login" component={Login}/>
             <Route exact path="/home" component={Home}/>
-            <Route exact path="/chat" component={ChatPage}/>
+            <Route exact path="/chat" component={ChatApp}/>
             <Route exact path="/map" render={(routeProps) => (<MapPage
               onUpdateCurrentLocation={this.onUpdateCurrentLocation}
               onMapClick={this.onUpdateDestination}
