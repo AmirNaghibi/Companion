@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
-import {BrowserRouter, Route} from 'react-router-dom';
+import {BrowserRouter, Route, Link} from 'react-router-dom';
+import ChatPage from './chat/Chat'
+import MapPage from './map/Map'
 import Register from './components/register';
 import Login from './components/login';
 import Landing from './components/Landing';
 import Home from './components/home';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar  from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 import {connect} from 'react-redux';
 import {userAuth} from './actions/authActions';
-
-import {firebase} from './firebase'
+import {auth, firebase} from './firebase'
 
 import ButtonAppBar from './components/ButtonAppBar';
 
@@ -31,13 +37,11 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: PAGE_MAP,
       path: TEST_PATH || [],
       currentLocation: null,
       destination: null,
       crimeData: TEST_CRIME_DATA || []
     };
-    this.onRoute = this.onRoute.bind(this);
     this.onUpdateCurrentLocation = this.onUpdateCurrentLocation.bind(this);
     this.onUpdateDestination = this.onUpdateDestination.bind(this);
     this.onUpdateCrimeData = this.onUpdateCrimeData.bind(this);
@@ -81,33 +85,33 @@ class App extends Component {
   }
 
   render() {
-    return (      
+    return (
       <div className="App">
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton color="inherit" aria-label="Menu"></IconButton>
-            <Typography variant="h6" color="inherit">Companion</Typography>
-            <Button color="inherit">Signup</Button>
-            <Button color="inherit">Login</Button>
-          </Toolbar>
-        </AppBar>
-        
         <BrowserRouter>
-          <ButtonAppBar authUser={this.props.user_profile}/>
-          <Route exact path="/" component={Landing}/>
-          <Route exact path="/register" component={Register}/>
-          <Route exact path="/login" component={Login}/>
-          <Route exact path="/home" component={Home}/>
-          <Route exact path="/chat" render={() => (<ChatPage />)} />
-          <Route exact path="/map" render={() => (<MapPage
-            onUpdateCurrentLocation={this.onUpdateCurrentLocation}
-            onMapClick={this.onUpdateDestination}
-            currentLocation={this.state.currentLocation}
-            crimeData={this.state.crimeData}
-            destination={this.state.destination}
-            path={this.state.path}
-            onRoute={this.onRoute}
-          />)} />                                     
+          <div className="inner-container">
+            <AppBar position="static">
+              <Toolbar>
+                {/*<IconButton color="inherit" aria-label="Menu"></IconButton>*/}
+                <Typography variant="h6" color="inherit">Sefuu</Typography>
+                {this.props.user_profile && <Link to="/register"><Button className="menu-button" color="inherit">Register</Button></Link>}
+                {this.props.user_profile && <Link to="/login" ><Button className="menu-button" color="inherit">Sign in</Button></Link>}
+                {!this.props.user_profile && <Link to="/"><Button className="menu-button" color="inherit" onClick={auth.doSignOut}>Sign out</Button></Link>}
+              </Toolbar>
+            </AppBar>
+            <Route exact path="/" component={Landing}/>
+            <Route exact path="/register" component={Register}/>
+            <Route exact path="/login" component={Login}/>
+            <Route exact path="/home" component={Home}/>
+            <Route exact path="/chat" render={() => (<ChatPage />)} />
+            <Route exact path="/map" render={() => (<MapPage
+              onUpdateCurrentLocation={this.onUpdateCurrentLocation}
+              onMapClick={this.onUpdateDestination}
+              currentLocation={this.state.currentLocation}
+              crimeData={this.state.crimeData}
+              destination={this.state.destination}
+              path={this.state.path}
+            />)} />
+          </div>
         </BrowserRouter>
       </div>
     );

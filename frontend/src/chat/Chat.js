@@ -9,7 +9,6 @@ class Chat extends Component {
     return (
       <div>
         <h1>This is the chat interface</h1>
-        {/* <button onClick={() => this.props.onRoute(PAGE_MAP)}>Go to Map Page</button> */}
       </div>
     );
   }

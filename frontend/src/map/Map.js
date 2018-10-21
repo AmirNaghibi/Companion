@@ -99,16 +99,7 @@ class MapPage extends Component {
   render() {
     return (
       <div style={styles.container}>
-
         {this.renderMap()}
-
-        <div style={styles.buttonContainer}>
-          <button onClick={this.fetchRoute}>Call Dummy Endpoint</button>
-          <button onClick={() => this.props.onRoute(PAGE_CHAT)}>Go to Chat Page</button>
-        </div>
-
-
-
       </div>
     );
   }
