@@ -57,7 +57,7 @@ class ChatApp extends React.Component {
 
 }
 ChatApp.defaultProps = {
-  username: 'Anonymous'
+  username: 'Charlotte'
 };
 
 export default ChatApp;

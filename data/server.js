@@ -16,7 +16,7 @@ app.get('/crimedata', (req, res) => {
 	res.send(CrimeData)
 })
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4008;
 	
 var server = http.listen(PORT, () => {
     console.log('server is listening on port ', server.address().port)

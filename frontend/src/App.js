@@ -162,7 +162,8 @@ class App extends Component {
             {(this.state.isLandingOpen && (window.location.href === 'http://localhost:3000/')) && <Landing onClick={this.dismissLanding} />}
             <StyledAppBar position="static">
               <StyledToolbar>
-                <Typography variant="h6" color="inherit"><img src={Logo} style={{ height: 30 }}/></Typography>
+                <Typography variant="h6" color="inherit"><Link to="/map"><img src={Logo} style={{ height: 30 }}/>
+                </Link></Typography>
                   <div style={{ display: 'flex' }}>
                 {this.props.user_profile && (window.location.href === 'http://localhost:3000/') && <Link to="/register"><Button className="menu-button" color="inherit">Register</Button></Link>}
                 {(this.props.user_profile && (window.location.href.includes('register'))) && <Link to="/login" ><Button className="menu-button" color="inherit">Sign in</Button></Link>}

@@ -29,7 +29,7 @@ class ChatInput extends React.Component {
   render() {
     return (
       <form className="chat-input" onSubmit={this.submitHandler}>
-      <i class="fas fa-map-marker-alt fa-2x map-marking-icon" ></i>
+      <i className="fas fa-map-marker-alt fa-2x map-marking-icon" ></i>
         <input type="text"
           onChange={this.textChangeHandler}
           value={this.state.chatInput}
