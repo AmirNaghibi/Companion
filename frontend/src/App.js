@@ -47,6 +47,13 @@ const StyledAppBar = withStyles({
   }
 })(AppBar);
 
+const StyledToolbar = withStyles({
+  root: {
+    display: 'flex',
+    justifyContent: 'space-between'
+  }
+})(Toolbar);
+
 class App extends Component {
 
   constructor(props) {
@@ -131,13 +138,15 @@ class App extends Component {
           <div className="inner-container">
             {(this.state.isLandingOpen && (window.location.href === 'http://localhost:3000/')) && <Landing onClick={this.dismissLanding} />}
             <StyledAppBar position="static">
-              <Toolbar>
+              <StyledToolbar>
                 {/*<IconButton color="inherit" aria-label="Menu"></IconButton>*/}
                 <Typography variant="h6" color="inherit"><img src={Logo} style={{ height: 30 }}/></Typography>
-                {this.props.user_profile && <Link to="/register"><Button className="menu-button" color="inherit">Register</Button></Link>}
-                {this.props.user_profile && <Link to="/login" ><Button className="menu-button" color="inherit">Sign in</Button></Link>}
+                  <div style={{ display: 'flex' }}>
+                {this.props.user_profile && (window.location.href === 'http://localhost:3000/') && <Link to="/register"><Button className="menu-button" color="inherit">Register</Button></Link>}
+                {(this.props.user_profile && (window.location.href === 'http://localhost:3000/register')) && <Link to="/login" ><Button className="menu-button" color="inherit">Sign in</Button></Link>}
                 {!this.props.user_profile && <Link to="/"><Button className="menu-button" color="inherit" onClick={auth.doSignOut}>Sign out</Button></Link>}
-              </Toolbar>
+                </div>
+              </StyledToolbar>
             </StyledAppBar>
             {/*<Route exact path="/" component={Landing}/>*/}
             <Route exact path="/register" component={Register}/>
