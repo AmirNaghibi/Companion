@@ -11,11 +11,11 @@ import Toolbar  from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
 import Logo from './assets/images/logo.svg';
 import { withStyles } from '@material-ui/core/styles';
 import TWITTER_1 from './assets/images/twitter-feed1.svg';
 import TWITTER_2 from './assets/images/twitter-feed2.svg';
-
 import {connect} from 'react-redux';
 import {userAuth} from './actions/authActions';
 import {auth, firebase} from './firebase'
@@ -71,6 +71,7 @@ class App extends Component {
       crimeData: [],
       isLandingOpen: true,
       activeTwitterId: null,
+      isDialogOpen: false,
     };
     this.onTwitterClick = this.onTwitterClick.bind(this);
     this.onUpdateCurrentLocation = this.onUpdateCurrentLocation.bind(this);
@@ -78,6 +79,8 @@ class App extends Component {
     this.getCrimeData = this.getCrimeData.bind(this);
     this.updatePath = this.updatePath.bind(this);
     this.dismissLanding = this.dismissLanding.bind(this);
+    this.showDialog = this.showDialog.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   componentDidMount(){
@@ -143,6 +146,14 @@ class App extends Component {
       .catch(err => console.error('Error: ', err));
   }
 
+  showDialog() {
+    this.setState({ isDialogOpen: true })
+  }
+
+  handleClose() {
+    this.setState({ isDialogOpen: false})
+  }
+
   render() {
     return (
       <div className="App">
@@ -151,16 +162,15 @@ class App extends Component {
             {(this.state.isLandingOpen && (window.location.href === 'http://localhost:3000/')) && <Landing onClick={this.dismissLanding} />}
             <StyledAppBar position="static">
               <StyledToolbar>
-                {/*<IconButton color="inherit" aria-label="Menu"></IconButton>*/}
                 <Typography variant="h6" color="inherit"><img src={Logo} style={{ height: 30 }}/></Typography>
                   <div style={{ display: 'flex' }}>
                 {this.props.user_profile && (window.location.href === 'http://localhost:3000/') && <Link to="/register"><Button className="menu-button" color="inherit">Register</Button></Link>}
-                {(this.props.user_profile && (window.location.href === 'http://localhost:3000/register')) && <Link to="/login" ><Button className="menu-button" color="inherit">Sign in</Button></Link>}
+                {(this.props.user_profile && (window.location.href.includes('register'))) && <Link to="/login" ><Button className="menu-button" color="inherit">Sign in</Button></Link>}
                 {!this.props.user_profile && <Link to="/"><Button className="menu-button" color="inherit" onClick={auth.doSignOut}>Sign out</Button></Link>}
+                {(this.props.user_profile && (window.location.href.includes('map'))) && <Button className="menu-button" color="primary" onClick={this.showDialog}>HELP ME</Button>}
                 </div>
               </StyledToolbar>
             </StyledAppBar>
-            {/*<Route exact path="/" component={Landing}/>*/}
             <Route exact path="/register" component={Register}/>
             <Route exact path="/" component={Login}/>
             <Route exact path="/home" component={Home}/>
@@ -173,6 +183,8 @@ class App extends Component {
               crimeData={this.state.crimeData}
               destination={this.state.destination}
               path={this.state.path}
+              handleClose={this.handleClose}
+              isDialogOpen={this.state.isDialogOpen}
               activeTwitterId={this.state.activeTwitterId}
               onTwitterClick={this.onTwitterClick}
               {...routeProps}

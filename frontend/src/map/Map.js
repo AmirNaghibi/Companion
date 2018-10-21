@@ -3,10 +3,13 @@ import '../App.css';
 import GoogleMap from './GoogleMap';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
+import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import { getStyle } from './routeUtils'
 import TWITTER_1 from '../assets/images/twitter-feed1.svg';
 import TWITTER_2 from '../assets/images/twitter-feed2.svg';
+import Modal from '@material-ui/core/Modal';
+
 
 const TEST_TWITTER = [
   { id: 1, svg: TWITTER_1, lat: 47.66003713198761, lng: -122.31556885183716 },
@@ -19,6 +22,31 @@ const TEST_FRIENDS = [
   { profile: 'https://scontent.fsea1-1.fna.fbcdn.net/v/t1.0-9/30124455_2076947005896033_4923734062704623616_o.jpg?_nc_cat=111&_nc_ht=scontent.fsea1-1.fna&oh=3d74880b51b98a040efc7385a422de78&oe=5C476F2B', name: 'Amir Nagibi', mutualFriends: 'You share 2 mutual friends with Harry Yao' },
 ];
 
+function rand() {
+  return Math.round(Math.random() * 20) - 10;
+}
+
+function getModalStyle() {
+  const top = 50 + rand();
+  const left = 50 + rand();
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    backgroundColor: 'white',
+    padding: 10
+  };
+}
+
+const styles2 = theme => ({
+  paper: {
+    position: 'absolute',
+    width: theme.spacing.unit * 50,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4,
+    backgroundColor: 'white'
+  },
+});
 
 const styles = {
   container: {
@@ -85,6 +113,8 @@ const FAB = ({ classes, onClick }) => (
   </Button>
 );
 
+const ModalWrapped = withStyles(styles2)(Modal);
+
 const FABStyled = withStyles(styles)(FAB);
 
 class MapPage extends Component {
@@ -108,6 +138,11 @@ class MapPage extends Component {
     // fetch current location from device GPS
     this.getGeolocationData();
     this.props.getCrimeData();
+  }
+
+  handleSubmit(lat, lon) {
+    console.log('hereeee', lat, lon);
+    this.props.handleClose();
   }
 
   getGeolocationData() {
@@ -156,6 +191,7 @@ class MapPage extends Component {
       path,
       onMapClick,
       activeTwitterId,
+      handleClose,
       onTwitterClick,
     } = this.props;
 
@@ -200,7 +236,7 @@ class MapPage extends Component {
   }
 
   render() {
-    const { activeTwitterId, onTwitterClick } = this.props;
+    const { activeTwitterId, onTwitterClick, isDialogOpen, currentLocation, handleClose, classes } = this.props;
 
     return (
       <div style={styles.container}>
@@ -225,6 +261,20 @@ class MapPage extends Component {
           </div>)}
         </div>
 
+        <ModalWrapped
+          open={isDialogOpen}
+          onClose={handleClose}>
+          <div style={getModalStyle()}>
+            <Typography variant="h6" id="modal-title">
+              Submit Current Location to Authorities
+            </Typography>
+            <Typography variant="subtitle2" id="lat">Latitude: {currentLocation ? currentLocation.lat : 47.66003713198761}</Typography>
+            <Typography variant="subtitle2" id="lat">Longitude: {currentLocation ? currentLocation.lng : -122.31556885183716
+}</Typography>
+            <Button type="primary" color="primary" onClick={() => this.handleSubmit(currentLocation ? currentLocation.lat : 47.66003713198761, currentLocation ? currentLocation.lng : -122.31556885183716)}>SUBMIT NOW</Button>
+          </div>
+        </ModalWrapped>
+
         <div style={styles.button}>
           <FABStyled onClick={() => this.switchTheme(this.state.type)} />
         </div>
@@ -235,5 +285,6 @@ class MapPage extends Component {
     );
   }
 }
+
 
 export default MapPage;
