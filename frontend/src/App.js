@@ -1,56 +1,39 @@
 import React, { Component } from 'react';
-import { PAGE_MAP, PAGE_CHAT } from './constants';
 import {BrowserRouter, Route} from 'react-router-dom';
-import Navbar from './components/appbar';
-import Chat from './chat/Chat.js'
+import Register from './components/register';
+import Login from './components/login';
+import Landing from './components/Landing';
+import Home from './components/home';
+
 import {connect} from 'react-redux';
 import {userAuth} from './actions/authActions';
-import MapPage from './map/Map.js'
-import './styles/landing.css';
 
-import Home from './components/home';
-import Login_Page from './components/login';
-import Register from './components/register';
-import Landing from './components/Landing';
+import {firebase} from './firebase'
+
+import ButtonAppBar from './components/ButtonAppBar';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      page: PAGE_MAP
-    };
-    this.onRoute = this.onRoute.bind(this);
-  }
 
-  onRoute(page) {
-    console.log(page);
-    if (page === PAGE_MAP || page === PAGE_CHAT) {
-      this.setState({ page });
-    }
+  componentDidMount(){
+    firebase.auth.onAuthStateChanged(user_data => {
+      this.props.userAuth(user_data);
+    })
   }
 
   render() {
-    return (
+    return (      
       <div>
-      <Navbar/>
-      <BrowserRouter>
+        <BrowserRouter>
           <div>
-            <Route exact path="/" component={Landing}/>
-            <Route exact path="/register" component={Register}/>
-            <Route exact path="/login" component={Login_Page}/>
-            <Route exact path="/maps" component={MapPage}/>
-            <Route exact path="/chat" component={Chat}/>
+          <ButtonAppBar authUser = {this.props.user_profile}/>
+            <Route exact path="/" component= {Landing}/>
+            <Route exact path="/register" component= {Register}/>
+            <Route exact path="/login" component= {Login}/>
             <Route exact path="/home" component= {Home}/>
           </div>
-      </BrowserRouter>
-
-        {/* Maps Page */}
-        {/* {(this.state.page === PAGE_CHAT) && <ChatPage onRoute={this.onRoute}/>} */}
-
-        {/* Chat Page */}
-        {/* {(this.state.page === PAGE_MAP) && <MapPage onRoute={this.onRoute}/>} */}
+        </BrowserRouter>
       </div>
-    )
+    );
   }
 }
 
@@ -73,3 +56,6 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
+
+
+// this is the main page of our app...
