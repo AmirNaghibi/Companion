@@ -53,7 +53,7 @@ class Login_Page extends Component {
         } = this.state;
 
         return (
-            <div>
+            <div className="form-div">
                 <form onSubmit={this.onSubmit}>
                     <div>
                         <TextField

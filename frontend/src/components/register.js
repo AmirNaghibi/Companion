@@ -5,6 +5,7 @@ import {withRouter} from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 // import {withStyles} from '@material-ui/core/styles';
+import '../styles/landing.css';
 
 const INITIAL_STATE = {
     firstName: '',
@@ -62,7 +63,7 @@ class Register extends Component {
         firstName === '' || lastName === '' 
 
         return (
-            <div>
+            <div className="form-div">
                 <form onSubmit={this.handleSubmit.bind(this)}>
                     <div>
                     <TextField
