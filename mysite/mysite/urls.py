@@ -25,4 +25,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', RedirectView.as_view(url='/dashboard/')),
     path('dashboard/', include('dashboard.urls')),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
