@@ -1,5 +1,6 @@
 # dubhacks2018
-find the safest way back home with a trusted
+Find the safest way back home with a trusted friend.
+
 
 
 # Frontend
@@ -7,6 +8,3 @@ find the safest way back home with a trusted
 npm install
 npm start
 ```
-
-
-
