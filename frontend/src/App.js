@@ -3,6 +3,11 @@ import './App.css';
 import { PAGE_MAP, PAGE_CHAT } from './constants';
 import ChatPage from './chat/Chat.js'
 import MapPage from './map/Map.js'
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 
 class App extends Component {
   constructor(props) {
@@ -23,8 +28,17 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        {/* Header*/}
-        <div style={{ height: 40, width: '100%', backgroundColor: '#c1c1c1'}}>HEADER</div>
+        <AppBar position="static">
+        <Toolbar>
+          <IconButton color="inherit" aria-label="Menu">
+            
+          </IconButton>
+          <Typography variant="h6" color="inherit">
+            Companion
+          </Typography>
+          <Button color="inherit">Login</Button>
+        </Toolbar>
+      </AppBar>
 
         {/* Maps Page */}
         {(this.state.page === PAGE_CHAT) && <ChatPage onRoute={this.onRoute}/>}
