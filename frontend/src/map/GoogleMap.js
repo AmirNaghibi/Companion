@@ -5,12 +5,11 @@ import {
   withGoogleMap,
   GoogleMap,
   DirectionsRenderer,
+  Marker,
   Polyline } from 'react-google-maps';
+import HeatmapLayer from "react-google-maps/lib/components/visualization/HeatmapLayer";
 const request = require('request');
 const { compose, withProps, lifecycle } = require("recompose");
-
-const API_KEY = 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YWE0NjFiZTZmNTk5YzE2ZGEzZDVhNzgiLCJpYXQiOjE1MjA3MjIzNjZ9.eAUtQuvek8JdumKiEdP-0KhAw6BngBZqJFSWrfBIxhU';
-const fleet = {};
 
 const TEST_START = {
   lat: 47.6564522,
@@ -37,6 +36,30 @@ const TEST_PATH = {
   }
 };
 
+const extractHeatmapData = (crimeData) => {
+  const result = crimeData
+    .filter(data => data.Latitude && data.Longitude)
+    .map(data => (new window.google.maps.LatLng(data.Latitude, data.Longitude)));
+
+
+  console.log('it id ', result[0].lat());
+
+  return result;
+};
+
+const extractHeatmapData1 = (crimeData) => {
+  const result = [];
+
+  crimeData
+    .filter(data => data.Latitude && data.Longitude)
+    .forEach(data => {
+      result.unshift(data.Latitude);
+      result.unshift(data.Longitude);
+    });
+
+  return result;
+};
+
 function getLatLon(arr) {
   const result = [
     { lat: 47.6564522, lng: -122.3277878 },
@@ -59,7 +82,7 @@ function getLatLon(arr) {
 
 const GoogleMapComponent = compose(
   withProps({
-    googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyBfzfG_CDAaVM2mYzqBRhQAe70ZX_epyHA&v=3.exp&libraries=geometry,drawing,places",
+    googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyBfzfG_CDAaVM2mYzqBRhQAe70ZX_epyHA&v=3.exp&libraries=geometry,drawing,places,visualization",
     loadingElement: <div style={{ height: '100%', width: '100%' }} />,
     containerElement: <div style={{ height: '100%', width: '100%' }} />,
     mapElement: <div style={{ height: '100%', width: '100%' }} />,
@@ -68,37 +91,40 @@ const GoogleMapComponent = compose(
   withGoogleMap,
   lifecycle({
     componentDidMount() {
-      const DirectionsService = new window.google.maps.DirectionsService();
 
-      DirectionsService.route({
-        origin: new window.google.maps.LatLng(49.2485585, -123.0579327),
-        destination: new window.google.maps.LatLng(49.2679807, -123.1886416),
-        travelMode: window.google.maps.TravelMode.DRIVING,
-      }, (result, status) => {
-        if (status === window.google.maps.DirectionsStatus.OK) {
-          this.setState({
-            directions: result,
-          });
-        } else {
-          console.error(`error fetching directions ${result}`);
-        }
-      });
     }
   })
 )(props => {
-  // const coordinates = props.pathCoordinates;
-  const coordinates = getLatLon([]);
-  // console.log(props.pathCoordinates);
+  const {
+    currentLocation,
+    destination,
+    crimeData,
+    path,
+    onMapClick
+  } = props;
+
+  const heatMapOptions = {
+    // gradient: ['#dc143c', '#f08080'],
+    radius: 25,
+  };
 
   return (
     <GoogleMap
       labelAnchor={new window.google.maps.Point(0, 0)}
-      defaultZoom={13}
-      defaultCenter = {{ lat: TEST_START.lat, lng: TEST_START.lng }}
+      defaultZoom={16}
+      defaultCenter={currentLocation}
       style={{ width: 800 }}
+      onClick={onMapClick}
     >
-      <Polyline
-        path={coordinates}
+      {/* TODO: add a toast to prompt user to select a destination */}
+      <Marker position={currentLocation} />
+
+      {/* Destination Marker */}
+      {destination && <Marker position={destination} />}
+
+      {/* Route PolyLine */}
+      {(destination && path) && <Polyline
+        path={path}
         geodesic={true}
         options={{
           strokeColor: '#ff2527',
@@ -109,7 +135,18 @@ const GoogleMapComponent = compose(
           //   offset: '0',
           //   repeat: '20px'
           // }],
-        }}/>
+        }}
+      />}
+
+      {/* Heat Map */}
+      {crimeData && <HeatmapLayer
+        data={extractHeatmapData(crimeData)}
+        options={heatMapOptions}
+      />}
+
+      {/* Crime Markers */}
+      {/* TODO - Replace markers with icons */}
+      {crimeData && crimeData.map(data => <Marker position={{lat: data.Latitude, lng: data.Longitude }} />)}
     </GoogleMap>)}
 );
 
