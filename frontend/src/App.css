@@ -61,6 +61,20 @@ body {
   color: #61dafb;
 }
 
+.container {
+  height: 80%;
+}
+
+.chat-input {
+  width: 100%;
+  padding: 0 10px;
+}
+
+.chat-input > input {
+  height: 40px;
+  box-shadow: none;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

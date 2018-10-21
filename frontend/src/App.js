@@ -11,6 +11,9 @@ import Toolbar  from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Logo from './assets/images/logo.svg';
+import { withStyles } from '@material-ui/core/styles';
+
 
 import {connect} from 'react-redux';
 import {userAuth} from './actions/authActions';
@@ -37,6 +40,13 @@ const processPaths = (paths) => {
   return paths.map(coord => ({ lat: coord.lat(), lng: coord.lng() }));
 };
 
+const StyledAppBar = withStyles({
+  root: {
+    background: 'white',
+    boxShadow: '0 0 5px #c1c1c1'
+  }
+})(AppBar);
+
 class App extends Component {
 
   constructor(props) {
@@ -45,12 +55,14 @@ class App extends Component {
       path: [],
       currentLocation: null,
       destination: null,
-      crimeData: []
+      crimeData: [],
+      isLandingOpen: true,
     };
     this.onUpdateCurrentLocation = this.onUpdateCurrentLocation.bind(this);
     this.onUpdateDestination = this.onUpdateDestination.bind(this);
     this.getCrimeData = this.getCrimeData.bind(this);
     this.updatePath = this.updatePath.bind(this);
+    this.dismissLanding = this.dismissLanding.bind(this);
   }
 
   componentDidMount(){
@@ -93,6 +105,13 @@ class App extends Component {
     });
   }
 
+  dismissLanding() {
+    window.setTimeout(() => {
+      this.setState({ isLandingOpen: false });
+    }, 500);
+
+  }
+
   getCrimeData() {
     const options = { method: 'GET' };
 
@@ -105,22 +124,24 @@ class App extends Component {
   }
 
   render() {
+    console.log(window.location.href);
     return (
       <div className="App">
         <BrowserRouter>
           <div className="inner-container">
-            <AppBar position="static">
+            {(this.state.isLandingOpen && (window.location.href === 'http://localhost:3000/')) && <Landing onClick={this.dismissLanding} />}
+            <StyledAppBar position="static">
               <Toolbar>
                 {/*<IconButton color="inherit" aria-label="Menu"></IconButton>*/}
-                <Typography variant="h6" color="inherit">Sefuu</Typography>
+                <Typography variant="h6" color="inherit"><img src={Logo} style={{ height: 30 }}/></Typography>
                 {this.props.user_profile && <Link to="/register"><Button className="menu-button" color="inherit">Register</Button></Link>}
                 {this.props.user_profile && <Link to="/login" ><Button className="menu-button" color="inherit">Sign in</Button></Link>}
                 {!this.props.user_profile && <Link to="/"><Button className="menu-button" color="inherit" onClick={auth.doSignOut}>Sign out</Button></Link>}
               </Toolbar>
-            </AppBar>
-            <Route exact path="/" component={Landing}/>
+            </StyledAppBar>
+            {/*<Route exact path="/" component={Landing}/>*/}
             <Route exact path="/register" component={Register}/>
-            <Route exact path="/login" component={Login}/>
+            <Route exact path="/" component={Login}/>
             <Route exact path="/home" component={Home}/>
             <Route exact path="/chat" component={ChatApp}/>
             <Route exact path="/map" render={(routeProps) => (<MapPage
